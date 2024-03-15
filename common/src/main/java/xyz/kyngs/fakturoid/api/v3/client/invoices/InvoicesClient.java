@@ -1,0 +1,7 @@
+package xyz.kyngs.fakturoid.api.v3.client.invoices;
+
+import xyz.kyngs.fakturoid.api.v3.model.invoice.Invoice;
+
+public interface InvoicesClient {
+    Invoice getInvoice(int id);
+}
