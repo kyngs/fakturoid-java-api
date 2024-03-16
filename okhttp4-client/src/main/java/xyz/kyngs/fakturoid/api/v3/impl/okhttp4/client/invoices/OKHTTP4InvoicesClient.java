@@ -7,6 +7,7 @@ import xyz.kyngs.fakturoid.api.v3.model.invoice.Invoice;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class OKHTTP4InvoicesClient extends OKHTTP4AbstractClient implements InvoicesClient {
     public OKHTTP4InvoicesClient(OKHTTP4FakturoidClient fakturoidClient, String account) {
@@ -16,6 +17,16 @@ public class OKHTTP4InvoicesClient extends OKHTTP4AbstractClient implements Invo
     @Override
     public Invoice getInvoice(int id) {
         return execute(createRequest("/accounts/" + account + "/invoices/" + id + ".json").get(), Invoice.class);
+    }
+
+    @Override
+    public Invoice createInvoice(Invoice invoice) {
+        return execute(createRequest("/accounts/" + account + "/invoices.json").post(jsonBody(invoice)), Invoice.class, 403);
+    }
+
+    @Override
+    public Invoice updateInvoice(int id, HashMap<String, ?> data) {
+        return execute(createRequest("/accounts/" + account + "/invoices/" + id + ".json").patch(jsonBody(data)), Invoice.class, 403);
     }
 
     @Override

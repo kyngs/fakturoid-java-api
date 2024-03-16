@@ -31,11 +31,11 @@ public class OKHTTP4AbstractClient {
         return fakturoidClient.parseJson(body, clazz);
     }
 
-    protected Response execute(Request.Builder request) {
-        return fakturoidClient.execute(request);
+    protected Response execute(Request.Builder request, int... expectedCodes) {
+        return fakturoidClient.execute(request, expectedCodes);
     }
 
-    protected <T> T execute(Request.Builder request, Class<T> clazz) {
-        return fakturoidClient.execute(request, clazz);
+    protected <T> T execute(Request.Builder request, Class<T> clazz, int... expectedCodes) {
+        return fakturoidClient.execute(request, clazz, expectedCodes);
     }
 }

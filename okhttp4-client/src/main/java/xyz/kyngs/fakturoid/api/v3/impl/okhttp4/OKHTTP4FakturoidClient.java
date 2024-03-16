@@ -16,6 +16,7 @@ import xyz.kyngs.fakturoid.api.v3.model.auth.OAuthToken;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
@@ -120,11 +121,11 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
         }
     }
 
-    public Response execute(Request.Builder request) {
-        try  {
+    public Response execute(Request.Builder request, int... expectedCodes) {
+        try {
             var res = client.newCall(request.build()).execute();
 
-            if (!res.isSuccessful() && res.code() != 404) {
+            if (!res.isSuccessful() && res.code() != 404 && !Util.intArrayContains(expectedCodes, res.code())) {
                 //noinspection DataFlowIssue
                 throw new APIException(request.build().url().url(), res.code(), res.body().string());
             }
@@ -134,9 +135,9 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
         }
     }
 
-    public <T> T execute(Request.Builder request, Class<T> clazz) {
-        try (var res = execute(request)) {
-            if (res.code() == 404) {
+    public <T> T execute(Request.Builder request, Class<T> clazz, int... expectedCodes) {
+        try (var res = execute(request, expectedCodes)) {
+            if (res.code() == 404 || Util.intArrayContains(expectedCodes, res.code())) {
                 return null;
             }
             //noinspection DataFlowIssue
