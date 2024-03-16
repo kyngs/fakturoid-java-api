@@ -1,8 +1,10 @@
 package xyz.kyngs.fakturoid.api.v3.impl.okhttp4;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.*;
 import xyz.kyngs.fakturoid.api.v3.FakturoidClient;
 import xyz.kyngs.fakturoid.api.v3.client.subjects.SubjectsClient;
@@ -16,11 +18,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Objects;
 
 public class OKHTTP4FakturoidClient implements FakturoidClient {
 
     private final OkHttpClient client;
     private final ObjectMapper objectMapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .build();
     private final Object tokenLock = new Object();
     private final String baseURL;
@@ -30,13 +35,14 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
     private final String tokenRequestAuthorizationHeader;
 
     private String tokenHeader;
-    private LocalDateTime tokenExpiration = LocalDateTime.MIN;
+    private LocalDateTime tokenExpiration = LocalDateTime.MIN
+            .plusMinutes(1);
 
     private OKHTTP4FakturoidClient(String baseURL, String userAgent, String clientId, String clientSecret) {
         this.baseURL = baseURL;
         this.userAgent = userAgent;
 
-        tokenRequestAuthorizationHeader = Base64.getUrlEncoder().encodeToString(
+        tokenRequestAuthorizationHeader = "Basic " + Base64.getUrlEncoder().encodeToString(
                 (clientId + ":" + clientSecret).getBytes()
         );
 
@@ -49,7 +55,7 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
     @Override
     public void refreshToken() {
         synchronized (tokenLock) {
-            var res = execute(createRequest("/oauth/token", tokenRequestAuthorizationHeader)
+            var res = execute(createRequest(tokenRequestAuthorizationHeader, "/oauth/token", false)
                     .post(jsonBody(Map.of(
                             "grant_type", "client_credentials"
                     ))), OAuthToken.class);
@@ -80,10 +86,13 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
     }
 
     public Request.Builder createRequest(String path) {
-        return createRequest(tokenHeader, path);
+        return createRequest(tokenHeader, path, true);
     }
 
-    public Request.Builder createRequest(String tokenHeader, String path) {
+    public Request.Builder createRequest(String tokenHeader, String path, boolean checkToken) {
+        if (checkToken) {
+            verifyToken();
+        }
         return new Request.Builder()
                 .url(baseURL + path)
                 .header("Authorization", tokenHeader)
@@ -117,7 +126,7 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
 
             if (!res.isSuccessful() && res.code() != 404) {
                 //noinspection DataFlowIssue
-                throw new APIException(res.code(), res.body().string());
+                throw new APIException(request.build().url().url(), res.code(), res.body().string());
             }
             return res;
         } catch (IOException e) {
@@ -140,17 +149,11 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
     }
 
     public static final class Builder {
-        private String baseURL;
         private String userAgent;
         private String clientId;
         private String clientSecret;
 
         private Builder() {
-        }
-
-        public Builder baseURL(String baseURL) {
-            this.baseURL = baseURL;
-            return this;
         }
 
         public Builder userAgent(String userAgent) {
@@ -168,7 +171,11 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
             return this;
         }
 
-        public OKHTTP4FakturoidClient build() {
+        public OKHTTP4FakturoidClient build(String baseURL) {
+            Objects.requireNonNull(userAgent, "User agent must be set");
+            Objects.requireNonNull(clientId, "Client ID must be set");
+            Objects.requireNonNull(clientSecret, "Client secret must be set");
+            Objects.requireNonNull(baseURL, "Base URL must be set");
             return new OKHTTP4FakturoidClient(baseURL, userAgent, clientId, clientSecret);
         }
     }

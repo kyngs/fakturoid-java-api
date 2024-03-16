@@ -1,4 +1,6 @@
 package xyz.kyngs.fakturoid.api.v3.model.auth;
 
-public record OAuthToken(String accessToken, String tokenType, int expiresIn) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record OAuthToken(@JsonProperty("access_token") String accessToken, @JsonProperty("token_type") String tokenType, @JsonProperty("expires_in") int expiresIn) {
 }

@@ -19,8 +19,8 @@ public class OKHTTP4AbstractClient {
         return fakturoidClient.createRequest(path);
     }
 
-    protected Request.Builder createRequest(String tokenHeader, String path) {
-        return fakturoidClient.createRequest(tokenHeader, path);
+    protected Request.Builder createRequest(String tokenHeader, String path, boolean checkToken) {
+        return fakturoidClient.createRequest(tokenHeader, path, checkToken);
     }
 
     protected RequestBody jsonBody(Object object) {

@@ -69,7 +69,7 @@ public class BaseInvoice<L extends BaseInvoice.BaseInvoiceLine> {
 
     @JsonProperty("order_number")
     private String orderNumber;
-    @JsonProperty("isued_on")
+    @JsonProperty("issued_on")
     private LocalDate issuedOn;
     @JsonProperty("taxable_fulfillment_due")
     private String taxableFulfillmentDue;
