@@ -32,7 +32,7 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
     private String tokenHeader;
     private LocalDateTime tokenExpiration = LocalDateTime.MIN;
 
-    public OKHTTP4FakturoidClient(String baseURL, String userAgent, String clientId, String clientSecret) {
+    private OKHTTP4FakturoidClient(String baseURL, String userAgent, String clientId, String clientSecret) {
         this.baseURL = baseURL;
         this.userAgent = userAgent;
 
@@ -132,6 +132,44 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
             }
             //noinspection DataFlowIssue
             return parseJson(res.body(), clazz);
+        }
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static final class Builder {
+        private String baseURL;
+        private String userAgent;
+        private String clientId;
+        private String clientSecret;
+
+        private Builder() {
+        }
+
+        public Builder baseURL(String baseURL) {
+            this.baseURL = baseURL;
+            return this;
+        }
+
+        public Builder userAgent(String userAgent) {
+            this.userAgent = userAgent;
+            return this;
+        }
+
+        public Builder clientId(String clientId) {
+            this.clientId = clientId;
+            return this;
+        }
+
+        public Builder clientSecret(String clientSecret) {
+            this.clientSecret = clientSecret;
+            return this;
+        }
+
+        public OKHTTP4FakturoidClient build() {
+            return new OKHTTP4FakturoidClient(baseURL, userAgent, clientId, clientSecret);
         }
     }
 }

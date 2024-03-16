@@ -9,7 +9,6 @@ group = "xyz.kyngs.fakturoid"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
-    withSourcesJar()
     withJavadocJar()
 }
 
