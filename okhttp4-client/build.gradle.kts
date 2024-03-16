@@ -1,5 +1,5 @@
 plugins {
-    id("java-library")
+    id("xyz.kyngs.fakturoid.library-conventions")
 }
 
 repositories {
