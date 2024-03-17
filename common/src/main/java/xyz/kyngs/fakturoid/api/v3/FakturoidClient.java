@@ -11,7 +11,7 @@ import xyz.kyngs.fakturoid.api.v3.client.invoices.InvoicesClient;
 public interface FakturoidClient {
     /**
      * Refreshes the access token
-     * It recommended to call this method every two hours (or a bit earlier = each 7140 seconds) to prevent the token from expiring
+     * It recommended to call this method every two hours (or a bit earlier = each 115 minutes ) to prevent the token from expiring
      */
     void refreshToken();
 
