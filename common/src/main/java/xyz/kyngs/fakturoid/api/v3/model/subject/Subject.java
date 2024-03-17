@@ -2,7 +2,7 @@ package xyz.kyngs.fakturoid.api.v3.model.subject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 public class Subject extends BaseSubject {
     @JsonProperty("id")
@@ -12,16 +12,16 @@ public class Subject extends BaseSubject {
     @JsonProperty("unreliable")
     private Boolean unreliable;
     @JsonProperty("unreliable_checked_at")
-    private ZonedDateTime unreliableCheckedAt;
+    private OffsetDateTime unreliableCheckedAt;
 
     @JsonProperty("html_url")
     private String htmlUrl;
     @JsonProperty("url")
     private String url;
     @JsonProperty("created_at")
-    private ZonedDateTime createdAt;
+    private OffsetDateTime createdAt;
     @JsonProperty("updated_at")
-    private ZonedDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     public Integer getId() {
         return id;
@@ -35,7 +35,7 @@ public class Subject extends BaseSubject {
         return unreliable;
     }
 
-    public ZonedDateTime getUnreliableCheckedAt() {
+    public OffsetDateTime getUnreliableCheckedAt() {
         return unreliableCheckedAt;
     }
 
@@ -47,11 +47,11 @@ public class Subject extends BaseSubject {
         return url;
     }
 
-    public ZonedDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public ZonedDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 }

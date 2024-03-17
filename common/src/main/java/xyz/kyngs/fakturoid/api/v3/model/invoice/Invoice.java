@@ -3,8 +3,7 @@ package xyz.kyngs.fakturoid.api.v3.model.invoice;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 
 public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
 
@@ -39,17 +38,17 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
     @JsonProperty("due_on")
     private LocalDate dueOn;
     @JsonProperty("sent_at")
-    private ZonedDateTime sentAt;
+    private OffsetDateTime sentAt;
     @JsonProperty("paid_on")
     private LocalDate paidOn;
     @JsonProperty("reminder_sent_at")
-    private ZonedDateTime reminderSentAt;
+    private OffsetDateTime reminderSentAt;
     @JsonProperty("cancelled_at")
-    private ZonedDateTime cancelledAt;
+    private OffsetDateTime cancelledAt;
     @JsonProperty("uncollectible_at")
-    private ZonedDateTime uncollectibleAt;
+    private OffsetDateTime uncollectibleAt;
     @JsonProperty("locked_at")
-    private ZonedDateTime lockedAt;
+    private OffsetDateTime lockedAt;
     @JsonProperty("webinvoice_seen_on")
     private LocalDate webInvoiceSeenOn;
 
@@ -85,9 +84,9 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
     @JsonProperty("subject_url")
     private String subjectURL;
     @JsonProperty("created_at")
-    private ZonedDateTime createdAt;
+    private OffsetDateTime createdAt;
     @JsonProperty("updated_at")
-    private ZonedDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     public Integer getId() {
         return id;
@@ -141,7 +140,7 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
         return dueOn;
     }
 
-    public ZonedDateTime getSentAt() {
+    public OffsetDateTime getSentAt() {
         return sentAt;
     }
 
@@ -149,19 +148,19 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
         return paidOn;
     }
 
-    public ZonedDateTime getReminderSentAt() {
+    public OffsetDateTime getReminderSentAt() {
         return reminderSentAt;
     }
 
-    public ZonedDateTime getCancelledAt() {
+    public OffsetDateTime getCancelledAt() {
         return cancelledAt;
     }
 
-    public ZonedDateTime getUncollectibleAt() {
+    public OffsetDateTime getUncollectibleAt() {
         return uncollectibleAt;
     }
 
-    public ZonedDateTime getLockedAt() {
+    public OffsetDateTime getLockedAt() {
         return lockedAt;
     }
 
@@ -225,11 +224,11 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
         return subjectURL;
     }
 
-    public ZonedDateTime getCreatedAt() {
+    public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public ZonedDateTime getUpdatedAt() {
+    public OffsetDateTime getUpdatedAt() {
         return updatedAt;
     }
 
@@ -319,9 +318,9 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
         @JsonProperty("tax_document_id")
         private Integer taxDocumentId;
         @JsonProperty("created_at")
-        private ZonedDateTime createdAt;
+        private OffsetDateTime createdAt;
         @JsonProperty("update_at")
-        private ZonedDateTime updatedAt;
+        private OffsetDateTime updatedAt;
 
         public Integer getId() {
             return id;
@@ -335,11 +334,11 @@ public class Invoice extends BaseInvoice<Invoice.InvoiceLine> {
             return taxDocumentId;
         }
 
-        public ZonedDateTime getCreatedAt() {
+        public OffsetDateTime getCreatedAt() {
             return createdAt;
         }
 
-        public ZonedDateTime getUpdatedAt() {
+        public OffsetDateTime getUpdatedAt() {
             return updatedAt;
         }
     }
