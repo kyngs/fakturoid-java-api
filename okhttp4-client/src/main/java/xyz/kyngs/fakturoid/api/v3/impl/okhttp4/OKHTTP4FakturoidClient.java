@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import okhttp3.*;
+import okio.Buffer;
 import xyz.kyngs.fakturoid.api.v3.FakturoidClient;
 import xyz.kyngs.fakturoid.api.v3.client.subjects.SubjectsClient;
 import xyz.kyngs.fakturoid.api.v3.client.invoices.InvoicesClient;
@@ -127,11 +128,22 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
 
             if (!res.isSuccessful() && res.code() != 404 && !Util.intArrayContains(expectedCodes, res.code())) {
                 //noinspection DataFlowIssue
-                throw new APIException(request.build().url().url(), res.code(), res.body().string());
+                throw new APIException(request.build().url().url(), res.code(), res.body().string(), bodyToString(request.build()));
             }
             return res;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static String bodyToString(final Request request){
+        try {
+            final Request copy = request.newBuilder().build();
+            final Buffer buffer = new Buffer();
+            copy.body().writeTo(buffer);
+            return buffer.readUtf8();
+        } catch (final IOException e) {
+            return "Cannot read body";
         }
     }
 
