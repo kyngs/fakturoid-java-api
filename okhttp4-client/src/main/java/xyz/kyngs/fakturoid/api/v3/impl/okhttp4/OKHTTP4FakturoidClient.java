@@ -1,5 +1,6 @@
 package xyz.kyngs.fakturoid.api.v3.impl.okhttp4;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ public class OKHTTP4FakturoidClient implements FakturoidClient {
     private final ObjectMapper objectMapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .serializationInclusion(JsonInclude.Include.NON_NULL)
             .build();
     private final Object tokenLock = new Object();
     private final String baseURL;

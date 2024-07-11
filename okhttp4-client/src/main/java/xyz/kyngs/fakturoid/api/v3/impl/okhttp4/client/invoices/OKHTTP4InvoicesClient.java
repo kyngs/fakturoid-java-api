@@ -1,5 +1,6 @@
 package xyz.kyngs.fakturoid.api.v3.impl.okhttp4.client.invoices;
 
+import xyz.kyngs.fakturoid.api.v3.client.invoices.InvoicePaymentsClient;
 import xyz.kyngs.fakturoid.api.v3.client.invoices.InvoicesClient;
 import xyz.kyngs.fakturoid.api.v3.impl.okhttp4.OKHTTP4FakturoidClient;
 import xyz.kyngs.fakturoid.api.v3.impl.okhttp4.client.OKHTTP4AbstractClient;
@@ -61,5 +62,10 @@ public class OKHTTP4InvoicesClient extends OKHTTP4AbstractClient implements Invo
             }
         }
         throw new RuntimeException("Failed to download invoice"); // Should never happen
+    }
+
+    @Override
+    public InvoicePaymentsClient payments(long id) {
+        return new OKHTTP4InvoicePaymentsClient(fakturoidClient, account, id);
     }
 }

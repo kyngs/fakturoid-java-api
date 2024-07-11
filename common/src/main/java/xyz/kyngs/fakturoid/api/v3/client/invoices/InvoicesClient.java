@@ -57,6 +57,13 @@ public interface InvoicesClient {
     }
 
     /**
+     * Returns the payments client for the invoice with the given id
+     * @param id id of the invoice
+     * @return the payments client for the invoice with the given id
+     */
+    InvoicePaymentsClient payments(long id);
+
+    /**
      * Result of the downloadInvoice method
      */
     enum DownloadInvoiceResult {
