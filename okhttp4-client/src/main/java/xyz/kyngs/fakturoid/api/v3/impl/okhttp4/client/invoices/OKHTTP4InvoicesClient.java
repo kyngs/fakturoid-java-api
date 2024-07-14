@@ -31,33 +31,23 @@ public class OKHTTP4InvoicesClient extends OKHTTP4AbstractClient implements Invo
     }
 
     @Override
-    public DownloadInvoiceResult downloadInvoice(File destination, int id) {
-        if (destination.exists()) {
-            throw new IllegalArgumentException("Destination file already exists");
-        }
-
+    public DownloadInvoiceResult downloadInvoice(int id) {
         try (var res = execute(createRequest("/accounts/" + account + "/invoices/" + id + "/download.pdf").get())) {
             switch (res.code()) {
                 case 200 -> {
                     try (var body = res.body()) {
-                        if (!destination.createNewFile()) {
-                            throw new IOException("Could not create destination file");
-                        }
-
-                        var sink = okio.Okio.buffer(okio.Okio.sink(destination));
                         assert body != null;
-                        sink.writeAll(body.source());
-                        sink.close();
-                        return DownloadInvoiceResult.SUCCESS;
+
+                        return new DownloadInvoiceResult(body.bytes());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
                 case 404 -> {
-                    return DownloadInvoiceResult.NOT_FOUND;
+                    return null;
                 }
                 case 204 -> {
-                    return DownloadInvoiceResult.GENERATING;
+                    return new DownloadInvoiceResult(null);
                 }
             }
         }
